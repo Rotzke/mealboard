@@ -46,7 +46,7 @@ def parse_recipes():
         dish_soup = BeautifulSoup(d.text, 'lxml')
         try:
             dictey['name'] = dish_soup.find('div', {'class': 'name'}).text
-        except:
+        except AttributeError:
             pass
         try:
             dictey['servings'] =\
@@ -54,11 +54,11 @@ def parse_recipes():
                                        'info'
                                        }
                                ).findAll('div')[0].text.strip().split(': ')[1]
-        except:
+        except AttributeError:
             dictey['servings'] = ''
         try:
             dictey['source'] = dish_soup.find('div', {'class': 'source'}).text
-        except:
+        except AttributeError:
             dictey['source'] = ''
         try:
             dictey['prep_time'] =\
@@ -66,20 +66,20 @@ def parse_recipes():
                                        'info'
                                        }
                                ).findAll('div')[1].text.strip().split(': ')[1]
-        except:
+        except AttributeError:
             dictey['prep_time'] = ''
         try:
             dictey['cook_time'] =\
                 dish_soup.find('div', {'class':
                                        'cookingTimeBox'
                                        }).text.strip().split(': ')[1]
-        except:
+        except AttributeError:
             dictey['cook_time'] = ''
         try:
             dictey['photo'] =\
                 img_base64(dish_soup.find('div',
                                           {'class': 'photo'}).img['src'])
-        except:
+        except AttributeError:
             dictey['photo'] = ''
         try:
             dictey['ingredients'] =\
@@ -91,7 +91,7 @@ def parse_recipes():
                                                    ).text.strip().split('\n')
                            if i != '']).encode('ascii',
                                                errors='ignore').decode('utf-8')
-        except:
+        except AttributeError:
             dictey['ingredients'] = ''
         try:
             dictey['directions'] =\
@@ -104,7 +104,7 @@ def parse_recipes():
                            if str(i) != '<br/>']
                           ).encode('ascii',
                                    errors='ignore').decode('utf-8')
-        except:
+        except AttributeError:
             dictey['directions'] = ''
         try:
             dictey['notes'] =\
@@ -116,7 +116,7 @@ def parse_recipes():
                 strip().encode('ascii', errors='ignore'
                                ).decode('utf-8').\
                 replace('\n', '').replace('\r', '')
-        except:
+        except AttributeError:
             dictey['notes'] = ''
         rating = stars(dish_soup.find('div', {'class': 'rating'}))
         if rating > 0:
