@@ -47,7 +47,7 @@ def parse_recipes():
         try:
             dictey['name'] = dish_soup.find('div', {'class': 'name'}).text
         except AttributeError:
-            pass
+            dictey['name'] = ''
         try:
             dictey['servings'] =\
                 dish_soup.find('div', {'class':
