@@ -11,9 +11,10 @@ from bs4 import BeautifulSoup
 
 URL = 'http://mealboard.macminicolo.net/mealboard'
 requests = requests.Session()
-payload = {'username': '', # Add credentials here
+payload = {'username': '',  # Add credentials here
            'pin': ''}
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+
 
 def stars(soup):
     """Convert stars png to rating points."""
@@ -54,11 +55,11 @@ def parse_recipes():
                                        }
                                ).findAll('div')[0].text.strip().split(': ')[1]
         except:
-            pass
+            dictey['servings'] = ''
         try:
             dictey['source'] = dish_soup.find('div', {'class': 'source'}).text
         except:
-            pass
+            dictey['source'] = ''
         try:
             dictey['prep_time'] =\
                 dish_soup.find('div', {'class':
@@ -66,20 +67,20 @@ def parse_recipes():
                                        }
                                ).findAll('div')[1].text.strip().split(': ')[1]
         except:
-            pass
+            dictey['prep_time'] = ''
         try:
             dictey['cook_time'] =\
                 dish_soup.find('div', {'class':
                                        'cookingTimeBox'
                                        }).text.strip().split(': ')[1]
         except:
-            pass
+            dictey['cook_time'] = ''
         try:
             dictey['photo'] =\
                 img_base64(dish_soup.find('div',
                                           {'class': 'photo'}).img['src'])
         except:
-            pass
+            dictey['photo'] = ''
         try:
             dictey['ingredients'] =\
                 '\n'.join([i.strip()
@@ -91,7 +92,7 @@ def parse_recipes():
                            if i != '']).encode('ascii',
                                                errors='ignore').decode('utf-8')
         except:
-            pass
+            dictey['ingredients'] = ''
         try:
             dictey['directions'] =\
                 '\n'.join([str(i).strip()
@@ -104,7 +105,7 @@ def parse_recipes():
                           ).encode('ascii',
                                    errors='ignore').decode('utf-8')
         except:
-            pass
+            dictey['directions'] = ''
         try:
             dictey['notes'] =\
                 dish_soup.find('div',
@@ -116,7 +117,7 @@ def parse_recipes():
                                ).decode('utf-8').\
                 replace('\n', '').replace('\r', '')
         except:
-            pass
+            dictey['notes'] = ''
         rating = stars(dish_soup.find('div', {'class': 'rating'}))
         if rating > 0:
             dictey['rating'] = str(int(rating))
